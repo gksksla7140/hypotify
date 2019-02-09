@@ -1,0 +1,38 @@
+.home-container {
+    display: flex;
+    flex-direction: column;
+   
+}
+
+
+.greeting {
+    background-image: url('https://images.pexels.com/photos/1371177/pexels-photo-1371177.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');
+    background-position: center;
+    background-size: cover;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    h1 {
+        font-weight: 600;
+        color: white;
+        font-size: 4rem;
+        align-self: center;
+    }
+}
+
+.item {
+    cursor: pointer;
+    color: #7cb7b5;
+    margin-top: 20px;
+    font-size:calc(12px + 1.5vw);
+    font-weight: 500;
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.active {
+    text-decoration: underline;
+}

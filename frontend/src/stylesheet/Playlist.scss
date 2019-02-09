@@ -1,0 +1,65 @@
+.playlist-index-container {
+    display: flex;
+    flex-direction: column;
+}
+.playlist-index {
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    background-color: #fff;
+    color: #444;
+    width: 80%;
+    align-self: center;
+
+}
+
+.searchbar-form {
+    width: 100%;
+}
+
+.playlist-item {
+    cursor: pointer;
+    color: #fff;
+    border-radius: 5px;
+    padding: 20px;
+    font-size: 40px;
+    font-weight: 600;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 300px;
+    &:hover {
+        color: #6ab9b6;
+        font-size: 50px;
+        text-shadow: none;
+    }
+}
+
+.searchbar-container {
+    width: 100%;
+    padding: 20px;
+}
+::-webkit-input-placeholder {
+  color: #6ab9b6;
+}
+
+
+.searchbar {
+    width: 200px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+    border: none;
+    border:solid 1px #6ab9b6;
+    color: #6ab9b6;
+    font-size: 30px;
+    border-radius: 30px;
+    height: 50px;
+    text-align: center;
+}
+
+/* When the input field gets focus, change its width to 100% */
+.searchbar:focus {
+    outline: none;
+    min-width: 250px;
+    width: 40%;
+}
