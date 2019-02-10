@@ -35,9 +35,7 @@ class Playlist extends React.Component {
         return (
             <div className='playlist-index-container'>
                 <Search onChange={ this.handleChange } value = { this.state.search }/>
-                <div className='playlist-index'>
                     {lists}
-                </div>
             </div>
         );
 
