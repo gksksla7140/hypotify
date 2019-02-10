@@ -15,6 +15,7 @@ export default withRouter(({ playlist, history, idx }) => {
         // navigate to the detail page when clicked
         history.push(`playlist/${idx}`)
     }
+    debugger
 
 
     return (

@@ -1,7 +1,8 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import PlaylistItem from './PlaylistItem';
-import SearchBar from '../components/Searchbar';
+import Search from '../components/Search';
+import GridList from '../components/GridList';
 
 class Playlist extends React.Component {
     constructor(props) {
@@ -29,12 +30,13 @@ class Playlist extends React.Component {
         const items = this.filterItems().map((playlist, idx) => (
             <PlaylistItem playlist = { playlist } idx = { idx } key = { idx }/>
         ));
+        const lists = <GridList listSubheader='Playlist' items ={ this.filterItems() }/>
 
         return (
             <div className='playlist-index-container'>
-                <SearchBar handleChange = { this.handleChange } value ={this.state.search}/>
+                <Search onChange={ this.handleChange } value = { this.state.search }/>
                 <div className='playlist-index'>
-                    {items}
+                    {lists}
                 </div>
             </div>
         );
