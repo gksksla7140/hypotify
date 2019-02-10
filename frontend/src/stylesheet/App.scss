@@ -6,3 +6,12 @@
 @import './Home.scss';
 @import './Playlist.scss';
 @import './DetailPage.scss';
+
+body {
+    font-family: Roboto, Arial, Helvetica, sans-serif;
+    color: white;
+}
+
+button:focus {outline:0;}
+
+

@@ -2,15 +2,19 @@
     width: 100%;
     height: 100vh;
     background-size: cover;
-    background-image: url('https://images.pexels.com/photos/1626481/pexels-photo-1626481.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background: linear-gradient(transparent, #000),
+                linear-gradient(90deg, #C074B2, #8AB5E8);
+    ;
+    
 }
 
 .login-title {
     color: white;
     font-size: calc(20px + 3.5vw);
-    margin-bottom: 10px;
+    font-weight: 900;
+    margin-bottom: 25px;
 }

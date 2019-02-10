@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-
+import Button from '../components/Button'
 
 
 class Login extends Component {
@@ -14,12 +14,17 @@ class Login extends Component {
     render() {
         return (
         <div className="login">
+            <div id='login-gradient-1'></div>
+            <div id='login-gradient-2'></div>
             <h1 className='login-title'> Welcome to Hypotify</h1>
-
-            <button 
-            type="button" 
-            onClick={this.handleClick}
-            className="btn btn-success btn-lg">Link my Spotify Profile</button>
+            <Button variant="contained" 
+                    color='primary'
+                    size = "large"
+                    className='button'
+                    onClick={this.handleClick}
+                    >
+                Link My Spotify
+            </Button>
         </div>
         );
     }

@@ -7,8 +7,6 @@
 const Spotify = require('spotify-web-api-node');
 const express = require('express');
 const dotenv = require("dotenv");
-const httpProxy = require('http-proxy');
-const apiProxy = httpProxy.createProxyServer();
 dotenv.config();
 const router = new express.Router();
 
@@ -51,7 +49,7 @@ router.get('/callback', (req, res) => {
   const { code, state } = req.query;
   const storedkey = req.cookies ? req.cookies[SESSION_KEY] : null;
   if (state === null || state !== storedkey) {
-    res.status(301).redirect("http://localhost:3000/notfound");
+    res.status(301).redirect(`${process.env.FRONTEND_URI}/notfound`);
   } else {
     res.clearCookie(SESSION_KEY);
     // this example below is shown at git repo: spotify-web-api-node
@@ -66,12 +64,10 @@ router.get('/callback', (req, res) => {
       spotifyServer.getMe().then(({ body }) => {
         console.log(body);
       });
-      
-
       // we can also pass the token to the browser to make requests from there
-      res.status(301).redirect(`http://localhost:3000/user/${access_token}/${refresh_token}`);
+      res.status(301).redirect(`${process.env.FRONTEND_URI}/user/${access_token}/${refresh_token}`);
     }).catch(err => {
-      res.status(301).redirect("http://localhost:3000/notfound");
+      res.status(301).redirect(`${process.env.FRONTEND_URI}/notfound`);
     });
   }
 });
