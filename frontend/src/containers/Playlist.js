@@ -1,6 +1,5 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import PlaylistItem from './PlaylistItem';
 import Search from '../components/Search';
 import GridList from '../components/GridList';
 
@@ -27,9 +26,6 @@ class Playlist extends React.Component {
     }
 
     render() {
-        const items = this.filterItems().map((playlist, idx) => (
-            <PlaylistItem playlist = { playlist } idx = { idx } key = { idx }/>
-        ));
         const lists = <GridList listSubheader='Playlist' items ={ this.filterItems() }/>
 
         return (
