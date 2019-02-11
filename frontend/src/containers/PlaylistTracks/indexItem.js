@@ -10,7 +10,6 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import IconButton from '@material-ui/core/IconButton';
 import PlayIcon from '@material-ui/icons/PlayArrow';
 import PauseIcon from '@material-ui/icons/Pause';
-import Tooltip from '@material-ui/core/Tooltip';
 
 const styles = theme => ({
   root: {
@@ -33,7 +32,7 @@ const styles = theme => ({
 
 
 function TitlebarGridList(props) {
-    const { classes, items, listSubheader, width, playAudio } = props;
+    const { classes, items, listSubheader, width, playAudio, currentSong } = props;
     const getGridListCols = () => {
         if (isWidthUp('xl', width)) {
         return 4;
@@ -72,20 +71,18 @@ function TitlebarGridList(props) {
             <ListSubheader component="div">{listSubheader}</ListSubheader>
             </GridListTile>
             {items.map((el, idx) => (
-             <Tooltip title={el.name} key={el.album.images[0].url}>
-                <GridListTile key={el.album.images[0].url}  >
+                <GridListTile key={idx}  >
                     <img src={el.album.images[0].url} alt='list-image' />
                     <GridListTileBar
                     title={el.name}
                     subtitle={<span> by: {el.artists[0].name}</span>}
                     actionIcon={
                         <IconButton className={classes.icon} onClick= {()=> playAudio(el.preview_url)}>
-                        <PauseIcon />
+                        {currentSong === el.preview_url ? <PauseIcon/> : <PlayIcon/>}
                         </IconButton>
                     }
                     />
                 </GridListTile>
-            </Tooltip>
             ))}
         </GridList>
         </div>

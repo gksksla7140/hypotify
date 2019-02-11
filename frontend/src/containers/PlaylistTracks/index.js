@@ -2,10 +2,11 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Loading from '../../components/Loading';
-import Search from '../../components/Searchbar';
+import Search from '../../components/Search';
 import { getPlaylistTracks } from '../../action';
 import IndexItem from './indexItem';
-
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 // I could make dispatch action to fetch all tracks for my playlist
 // beforehand ,but I thought it would unnecessary because  a user 
@@ -26,11 +27,12 @@ class DetailPage extends React.Component {
         }
     }
 
-    handleChange = (e) => {
+    handleChange = e => {
+        debugger
         this.setState({search: e.target.value});
     }
 
-    goHome=() => {
+    goHome = () => {
         this.props.history.push('/');
     }
 
@@ -76,6 +78,7 @@ class DetailPage extends React.Component {
     
     //toggle sort
     sort = () => {
+        debugger
         this.setState({sorted: !this.state.sorted});
     }
 
@@ -112,10 +115,10 @@ class DetailPage extends React.Component {
 
     render() {
 
-        const {  search, sorted, playlist } = this.state;
+        const {  search, sorted, playlist, currentSong } = this.state;
         // if loading
         const { playlistTracks: tracks } = this.props;
-        if (!tracks) {
+        if (!tracks || !playlist) {
             return (
             <div className='user-container'>
                 < Loading type = 'bubbles' color='black'/>
@@ -123,23 +126,31 @@ class DetailPage extends React.Component {
         }
         const items = this.sortByPopularity(this.filterTracks()).map((track, idx) => track.track);
         const resultTracks = <IndexItem listSubheader='Playlist' playAudio = { this.playAudio }
-                                        items ={ items }/>
-        let sortButton = sorted ? 'Unsort' : 'Sort by Popularity'
+                                        items ={ items } currentSong = { currentSong }/>
         return (
-            <div className='detail-container'>
-                {/* Header */}
-                <div className='track-header'>
+            <div>
+                <div id='track-header'>
                     <h1 className='login-title'>{playlist.name}</h1>
                 </div>
-                {/* Search Bar */}
-                <Search value={ search } handleChange = {this.handleChange}/>
-                {/* Sort Button */}
-                <button onClick={this.sort} className="btn btn-outline-primary">{sortButton}</button>
-                {/* Home Link */}
-                <a href="#" className='home-link' onClick={this.goHome}>Go back home</a>
-                {/* Index List */}
+                <div id='detail-container'>
+                    <Search value={ search } onChange = {this.handleChange}/>
+                        <div id='detail-buttons'>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={sorted}
+                                        onClick={this.sort}
+                                        
+                                        color="primary"
+                                    />
+                                }
+                                label="Sort By Popularity"
+                            />
+                            <a href="#" className='home-link' onClick={this.goHome}>Go back home</a>
+                        </div>
 
-                { resultTracks }
+                    { resultTracks }
+                </div>
 
             </div>
         );
