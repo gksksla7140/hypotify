@@ -19,6 +19,7 @@ class DetailPage extends React.Component {
             playlist: null,
             search: '',
             sorted: false,
+            example: null,
         }
     }
 
@@ -30,13 +31,13 @@ class DetailPage extends React.Component {
         this.props.history.push('/');
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         // fetch tracks of this playlist
         const { match, accessToken, playlists } = this.props;
         const playlist = playlists[match.params.id];
 
-
-        fetch(playlist.tracks.href, {
+        debugger
+        await fetch(playlist.tracks.href, {
           headers: {'Authorization': 'Bearer ' + accessToken}
         })
         .then(res =>
@@ -45,6 +46,14 @@ class DetailPage extends React.Component {
             this.setState({tracks: res.items, playlist})})
         .catch(err => {
             this.setState({error: err})});
+
+        fetch(`https://api.spotify.com/v1/tracks/${this.state.tracks[0].track.id}`, {
+          headers: {'Authorization': 'Bearer ' + accessToken}
+        })
+        .then(res => res.json())
+        .then(res => {
+            console.log(res)
+        })
     }
     
     //toggle sort
@@ -59,6 +68,7 @@ class DetailPage extends React.Component {
     }
 
     filterTracks = () => {
+        console.log(this.state.tracks)
         // search bar searches for matching names and artists
         const { tracks, search } = this.state;
         return tracks.filter(track => {
