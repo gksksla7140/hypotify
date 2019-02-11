@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import Search from '../components/Search';
-import GridList from '../components/GridList';
+import Search from '../../../components/Search';
+import GridList from './indexItem';
 
 class Playlist extends React.Component {
     constructor(props) {

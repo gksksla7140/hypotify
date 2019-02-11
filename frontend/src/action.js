@@ -48,10 +48,22 @@ export const getPlaylist = userId => dispatch => {
             type: GET_PLAYLIST,
             payload: res
         })
-    }).catch (e => {
+    }).catch(e => {
         dispatch({
             type: FETCH_ERROR,
             payload: JSON.parse(e.response).error.message
         })
     })
+}
+
+export const getPlaylistTracks = playlist => dispatch => {
+    dispatch({type: LOADING});
+    const { id: playlistId } = playlist;
+    spotifyApi.getPlaylistTracks(playlistId)
+    .then(res=> dispatch({ type: GET_PLAYLIST_TRACKS,
+        payload: res.items 
+    }))
+    .catch(e => dispatch({type: FETCH_ERROR,
+        payload: JSON.parse(e.response).error.message
+    }))
 }

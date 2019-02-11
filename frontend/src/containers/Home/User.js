@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {getUser, setTokens, getPlaylist} from '../action';
-import Loading from '../components/Loading';
+import {getUser, setTokens, getPlaylist} from '../../action';
+import Loading from '../../components/Loading';
 
 class User extends React.Component {
     

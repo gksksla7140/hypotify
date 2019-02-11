@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Search from '../components/Searchbar';
-import Loading from '../components/Loading';
-import ItemDisplay from '../components/ItemDisplay';
+import Search from '../../../components/Searchbar';
+import Loading from '../../../components/Loading';
+import ItemDisplay from '../../../components/ItemDisplay';
 
 class SearchSong extends React.Component {
     constructor(props) {

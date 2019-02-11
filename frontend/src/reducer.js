@@ -3,7 +3,8 @@ GET_TOKEN,
 LOADING,
 USER_RECEIVED,
 FETCH_ERROR,
-GET_PLAYLIST
+GET_PLAYLIST,
+GET_PLAYLIST_TRACKS
 } from './constant';
 
 
@@ -13,7 +14,8 @@ const initialState = {
     loading: false,
     error: [],
     user: null,
-    playlist: null
+    playlist: null,
+    playlistTracks: null
 };
 export default  (state = initialState, action) => {
     // prevent state from changing
@@ -43,9 +45,17 @@ export default  (state = initialState, action) => {
     case FETCH_ERROR:
     const error = state.error;
       return {
-          ...state,
-          error: [...error, action.payload]
+        ...state,
+        error: [...error, action.payload]
       }
+    case GET_PLAYLIST_TRACKS:
+      return {
+        ...state,
+        loading: false,
+        error: [],
+        playlistTracks: action.payload
+      }
+      
     default:
       return state;
     }

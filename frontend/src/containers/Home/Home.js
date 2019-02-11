@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Greeting from '../components/Greeting';
-import Nav from '../components/Nav';
+import Greeting from '../../components/Greeting';
+import Nav from '../../components/Nav';
 import Playlist from './Playlist';
 import SearchSong from './SearchSong';
 import SearchAlbum from './SearchAlbum';

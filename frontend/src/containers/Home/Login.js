@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import Button from '../components/Button'
+import Button from '../../components/Button'
 
 
 class Login extends Component {

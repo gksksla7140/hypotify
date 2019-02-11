@@ -1,9 +1,11 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import Loading from '../components/Loading';
-import displayTrack from '../components/ItemDisplay';
-import Search from '../components/Searchbar';
+import Loading from '../../components/Loading';
+import Search from '../../components/Searchbar';
+import { getPlaylistTracks } from '../../action';
+import IndexItem from './indexItem';
+
 
 // I could make dispatch action to fetch all tracks for my playlist
 // beforehand ,but I thought it would unnecessary because  a user 
@@ -15,11 +17,12 @@ class DetailPage extends React.Component {
         super(props);
         this.state = {
             tracks: null,
-            error: null,
             playlist: null,
             search: '',
             sorted: false,
-            example: null,
+            audio: null,
+            playing: false,
+            currentSong: false,
         }
     }
 
@@ -31,29 +34,44 @@ class DetailPage extends React.Component {
         this.props.history.push('/');
     }
 
-    async componentDidMount() {
+    playAudio= (previewUrl) => {
+        let audio = new Audio(previewUrl);
+        if (!this.state.playing) {
+            audio.play();
+            this.setState({
+                playing: true,
+                playingUrl: previewUrl,
+                audio,
+                currentSong: previewUrl,
+            })
+        } else {
+            if (this.state.playingUrl === previewUrl) {
+                this.state.audio.pause();
+                this.setState({
+                    playing: false,
+                    currentSong: false,
+                })
+            } else {
+                this.state.audio.pause();
+                audio.play();
+                this.setState({
+                    playing: true,
+                    playingUrl: previewUrl,
+                    audio,
+                    currentSong: previewUrl
+                })
+            }
+        }
+    }
+
+    componentDidMount() {
         // fetch tracks of this playlist
-        const { match, accessToken, playlists } = this.props;
+        const { match, playlists, getPlaylistTracks } = this.props;
         const playlist = playlists[match.params.id];
 
-        debugger
-        await fetch(playlist.tracks.href, {
-          headers: {'Authorization': 'Bearer ' + accessToken}
-        })
-        .then(res =>
-            res.json())
-        .then(res => {
-            this.setState({tracks: res.items, playlist})})
-        .catch(err => {
-            this.setState({error: err})});
+        this.setState({ playlist });
 
-        fetch(`https://api.spotify.com/v1/tracks/${this.state.tracks[0].track.id}`, {
-          headers: {'Authorization': 'Bearer ' + accessToken}
-        })
-        .then(res => res.json())
-        .then(res => {
-            console.log(res)
-        })
+        getPlaylistTracks(playlist);
     }
     
     //toggle sort
@@ -68,9 +86,9 @@ class DetailPage extends React.Component {
     }
 
     filterTracks = () => {
-        console.log(this.state.tracks)
         // search bar searches for matching names and artists
-        const { tracks, search } = this.state;
+        const { search } = this.state;
+        const { playlistTracks: tracks } = this.props;
         return tracks.filter(track => {
             const name = track.track.name.toLowerCase();
             let artists = '';
@@ -93,15 +111,19 @@ class DetailPage extends React.Component {
     }
 
     render() {
-        const { tracks, playlist, search, sorted } = this.state;
+
+        const {  search, sorted, playlist } = this.state;
         // if loading
+        const { playlistTracks: tracks } = this.props;
         if (!tracks) {
             return (
             <div className='user-container'>
                 < Loading type = 'bubbles' color='black'/>
             </div>)
         }
-        const items = this.sortByPopularity(this.filterTracks()).map((track, idx) => displayTrack(track.track, idx));
+        const items = this.sortByPopularity(this.filterTracks()).map((track, idx) => track.track);
+        const resultTracks = <IndexItem listSubheader='Playlist' playAudio = { this.playAudio }
+                                        items ={ items }/>
         let sortButton = sorted ? 'Unsort' : 'Sort by Popularity'
         return (
             <div className='detail-container'>
@@ -116,9 +138,9 @@ class DetailPage extends React.Component {
                 {/* Home Link */}
                 <a href="#" className='home-link' onClick={this.goHome}>Go back home</a>
                 {/* Index List */}
-                <div className='track-index'>
-                    {items}
-                </div>
+
+                { resultTracks }
+
             </div>
         );
 
@@ -128,9 +150,13 @@ class DetailPage extends React.Component {
 
 const msp = state => ({
     playlists: state.playlist.items,
-    accessToken: state.accessToken
-
+    accessToken: state.accessToken,
+    playlistTracks: state.playlistTracks
 });
 
-export default connect(msp, null)(withRouter(DetailPage));
+const mdp = dispatch => ({
+    getPlaylistTracks: playlist => dispatch(getPlaylistTracks(playlist)),
+})
+
+export default connect(msp, mdp)(withRouter(DetailPage));
 

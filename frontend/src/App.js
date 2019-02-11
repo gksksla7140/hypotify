@@ -8,10 +8,10 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 
 // pages
-import Login from './containers/Login';
-import User from './containers/User';
-import Home from './containers/Home';
-import DetailPage from './containers/DetailPage';
+import Login from './containers/Home/Login';
+import User from './containers/Home/User';
+import Home from './containers/Home/Home';
+import PlaylistTracks from './containers/PlaylistTracks/index';
 
 
 // create Color pallets for styles// 
@@ -41,7 +41,7 @@ class App extends Component {
                     <AuthRoute exact path="/login" component={ Login } />
                     <AuthRoute exact path="/user/:accessToken/:refreshToken" component={ User } />
                     <ProtectedRoute exact path="/" component={ Home } />
-                    <ProtectedRoute exact path="/playlist/:id" component={ DetailPage }/>
+                    <ProtectedRoute exact path="/playlist/:id" component={ PlaylistTracks }/>
                     <Redirect to="/login" />
                 </Switch>
               </Router>

@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Search from '../components/Searchbar';
-import Loading from '../components/Loading';
-import AlbumDisplay from '../components/AlbumDisplay';
+import Search from '../../../components/Searchbar';
+import Loading from '../../../components/Loading';
+import AlbumDisplay from '../../../components/AlbumDisplay';
 
 class SearchAlbum extends React.Component {
     constructor(props) {
