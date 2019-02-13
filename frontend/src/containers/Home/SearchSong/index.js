@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Search from '../../../components/Searchbar';
+import Search from '../../../components/Search';
 import Loading from '../../../components/Loading';
 import ItemDisplay from '../../../components/ItemDisplay';
 
@@ -42,6 +42,36 @@ class SearchSong extends React.Component {
         })
         
     }
+    
+    playAudio= (previewUrl) => {
+        let audio = new Audio(previewUrl);
+        if (!this.state.playing) {
+            audio.play();
+            this.setState({
+                playing: true,
+                playingUrl: previewUrl,
+                audio,
+                currentSong: previewUrl,
+            })
+        } else {
+            if (this.state.playingUrl === previewUrl) {
+                this.state.audio.pause();
+                this.setState({
+                    playing: false,
+                    currentSong: false,
+                })
+            } else {
+                this.state.audio.pause();
+                audio.play();
+                this.setState({
+                    playing: true,
+                    playingUrl: previewUrl,
+                    audio,
+                    currentSong: previewUrl
+                })
+            }
+        }
+    }
 
     handleChange = (e) => {
         this.setState({search: e.target.value});
@@ -58,7 +88,10 @@ class SearchSong extends React.Component {
         }
         let items;
         if (result) {
-            items = this.sortByPopularity([...result]).map((track, idx) => ItemDisplay(track, idx));
+            // items = this.sortByPopularity([...result]).map((track, idx) => ItemDisplay(track, idx));
+                items = this.sortByPopularity(this.filterTracks()).map((track, idx) => track.track);
+                const resultTracks = <IndexItem listSubheader='Playlist' playAudio = { this.playAudio }
+                                                items ={ items } currentSong = { currentSong }/>
         }
 
         let sortButton = sorted ? 'Unsort' : 'Sort by Popularity'
@@ -66,7 +99,7 @@ class SearchSong extends React.Component {
         return (
             <div className='detail-container'>
                 <form className= 'searchbar-form' onSubmit={this.handleSubmit}>
-                    <Search handleChange={this.handleChange} value= {search}/>
+                    <Search onChange={this.handleChange} value= {search}/>
                 </form>
                 <button onClick={this.sort} className="btn btn-outline-primary">{sortButton}</button>
                 <div className='track-index'>
