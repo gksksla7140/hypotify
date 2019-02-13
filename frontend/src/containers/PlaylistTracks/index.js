@@ -28,9 +28,9 @@ class DetailPage extends React.Component {
     }
 
     handleChange = e => {
-        debugger
         this.setState({search: e.target.value});
     }
+
 
     goHome = () => {
         this.props.history.push('/');
@@ -68,17 +68,30 @@ class DetailPage extends React.Component {
 
     componentDidMount() {
         // fetch tracks of this playlist
-        const { match, playlists, getPlaylistTracks } = this.props;
+        const { match, playlists, getPlaylistTracks, history } = this.props;
         const playlist = playlists[match.params.id];
-
         this.setState({ playlist });
-
         getPlaylistTracks(playlist);
+        // when users leave the page stop music
+        window.onpopstate =  () => {
+            this.resetAudio();
+        };
     }
+
+    resetAudio = () => {
+        this.state.audio.pause();
+        this.setState({
+                audio: null,
+                playing: false,
+                currentSong: false,
+        });
+
+    }
+
     
     //toggle sort
     sort = () => {
-        debugger
+
         this.setState({sorted: !this.state.sorted});
     }
 
