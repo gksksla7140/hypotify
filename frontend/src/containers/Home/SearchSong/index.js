@@ -2,7 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Search from '../../../components/Search';
 import Loading from '../../../components/Loading';
-import ItemDisplay from '../../../components/ItemDisplay';
+import IndexItem from './indexItem';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 class SearchSong extends React.Component {
     constructor(props) {
@@ -14,6 +16,13 @@ class SearchSong extends React.Component {
             sorted: false,
         }
     }
+
+    // componentDidMount() {
+    //     // when users leave the page stop music
+    //     window.onpopstate = () => {
+    //         debugger
+    //     };
+    // }
     sort = () => {
         this.setState({sorted: !this.state.sorted});
     }
@@ -43,42 +52,13 @@ class SearchSong extends React.Component {
         
     }
     
-    playAudio= (previewUrl) => {
-        let audio = new Audio(previewUrl);
-        if (!this.state.playing) {
-            audio.play();
-            this.setState({
-                playing: true,
-                playingUrl: previewUrl,
-                audio,
-                currentSong: previewUrl,
-            })
-        } else {
-            if (this.state.playingUrl === previewUrl) {
-                this.state.audio.pause();
-                this.setState({
-                    playing: false,
-                    currentSong: false,
-                })
-            } else {
-                this.state.audio.pause();
-                audio.play();
-                this.setState({
-                    playing: true,
-                    playingUrl: previewUrl,
-                    audio,
-                    currentSong: previewUrl
-                })
-            }
-        }
-    }
 
     handleChange = (e) => {
         this.setState({search: e.target.value});
     }
 
     render() {
-        const { search, loading, result, sorted } = this.state;
+        const { search, loading, result, sorted, } = this.state;
         // if loading
           if (loading) {
             return (
@@ -87,11 +67,11 @@ class SearchSong extends React.Component {
             </div>)
         }
         let items;
+        let resultTracks;
         if (result) {
-            // items = this.sortByPopularity([...result]).map((track, idx) => ItemDisplay(track, idx));
-                items = this.sortByPopularity(this.filterTracks()).map((track, idx) => track.track);
-                const resultTracks = <IndexItem listSubheader='Playlist' playAudio = { this.playAudio }
-                                                items ={ items } currentSong = { currentSong }/>
+                items = this.sortByPopularity(result);
+                resultTracks = <IndexItem listSubheader='Playlist' playAudio = { this.props.playAudio }
+                                                items ={ items } currentSong = { this.props.currentSong }/>
         }
 
         let sortButton = sorted ? 'Unsort' : 'Sort by Popularity'
@@ -101,10 +81,21 @@ class SearchSong extends React.Component {
                 <form className= 'searchbar-form' onSubmit={this.handleSubmit}>
                     <Search onChange={this.handleChange} value= {search}/>
                 </form>
-                <button onClick={this.sort} className="btn btn-outline-primary">{sortButton}</button>
-                <div className='track-index'>
-                    {items}
-                </div>
+                 <div id='detail-buttons'>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={sorted}
+                                        onClick={this.sort}
+                                        
+                                        color="primary"
+                                    />
+                                }
+                                label="Sort By Popularity"
+                            />
+                        </div>
+                {resultTracks}
+
             </div>
 
         );
