@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Search from '../../../components/Searchbar';
+import Search from '../../../components/Search';
 import Loading from '../../../components/Loading';
-import AlbumDisplay from '../../../components/AlbumDisplay';
+import IndexItem from './indexItem';
 
 class SearchAlbum extends React.Component {
     constructor(props) {
@@ -48,17 +48,16 @@ class SearchAlbum extends React.Component {
         }
         let items;
         if (result) {
-            items = result.map((track, idx) => AlbumDisplay(track, idx));
+            items = <IndexItem items={ result } />
         }
 
         return (
             <div className='detail-container'>
                 <form className='searchbar-form' onSubmit={this.handleSubmit}>
-                    <Search handleChange={this.handleChange} value= {search}/>
+                    <Search onChange={this.handleChange} value= {search}/>
                 </form>
-                <div className='track-index'>
-                    {items}
-                </div>
+                {items}
+
             </div>
 
         );

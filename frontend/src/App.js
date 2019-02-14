@@ -12,7 +12,7 @@ import Login from './containers/Home/Login';
 import User from './containers/Home/User';
 import Home from './containers/Home/Home';
 import PlaylistTracks from './containers/PlaylistTracks/index';
-
+import AlbumTracks from './containers/AlbumTracks/index';
 
 // create Color pallets for styles// 
 const theme = createMuiTheme({
@@ -42,6 +42,7 @@ class App extends Component {
                     <AuthRoute exact path="/user/:accessToken/:refreshToken" component={ User } />
                     <ProtectedRoute exact path="/" component={ Home } />
                     <ProtectedRoute exact path="/playlist/:id" component={ PlaylistTracks }/>
+                    <ProtectedRoute exact path="/Album/:id/" component={ AlbumTracks }/>
                     <Redirect to="/login" />
                 </Switch>
               </Router>

@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Loading from '../../components/Loading';
 import Search from '../../components/Search';
-import { getPlaylistTracks } from '../../action';
+import { getAlbumTracks } from '../../action';
 import IndexItem from './indexItem';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -13,17 +13,18 @@ import Checkbox from '@material-ui/core/Checkbox';
 // will most likely not click every playlist so I fetch individually
 // whenever a user clicks.
 
-class DetailPage extends React.Component {
+class AlbumPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             tracks: null,
+            album: null,
             playlist: null,
             search: '',
-            sorted: false,
             audio: null,
             playing: false,
             currentSong: false,
+
         }
     }
 
@@ -60,7 +61,8 @@ class DetailPage extends React.Component {
                     playing: true,
                     playingUrl: previewUrl,
                     audio,
-                    currentSong: previewUrl
+                    currentSong: previewUrl,
+                    image: null,
                 })
             }
         }
@@ -68,10 +70,9 @@ class DetailPage extends React.Component {
 
     componentDidMount() {
         // fetch tracks of this playlist
-        const { match, playlists, getPlaylistTracks, history } = this.props;
-        const playlist = playlists[match.params.id];
-        this.setState({ playlist });
-        getPlaylistTracks(playlist);
+        const { match, getAlbumTracks } = this.props;
+        const albumId = match.params.id;
+        getAlbumTracks(albumId);
         // when users leave the page stop music
         window.onpopstate =  () => {
             this.resetAudio();
@@ -79,38 +80,26 @@ class DetailPage extends React.Component {
     }
 
     resetAudio = () => {
-        if (this.state.audio) {
-            this.state.audio.pause();
-            this.setState({
-                    audio: null,
-                    playing: false,
-                    currentSong: false,
-            });
-        }
+        if (!this.state.audio) return;
+        this.state.audio.pause();
+        this.setState({
+                audio: null,
+                playing: false,
+                currentSong: false,
+        });
 
     }
 
     
-    //toggle sort
-    sort = () => {
-
-        this.setState({sorted: !this.state.sorted});
-    }
-
-    sortByPopularity = (tracks) => {
-        const { sorted } = this.state;
-        if (!sorted) return tracks;
-        return tracks.sort((a,b) => b.track.popularity - a.track.popularity )
-    }
 
     filterTracks = () => {
         // search bar searches for matching names and artists
         const { search } = this.state;
-        const { playlistTracks: tracks } = this.props;
+        const { albumTracks: tracks } = this.props;
         return tracks.filter(track => {
-            const name = track.track.name.toLowerCase();
+            const name = track.name.toLowerCase();
             let artists = '';
-            const trackArtist = track.track.artists;
+            const trackArtist = track.artists;
 
             trackArtist.forEach((artist, idx) => {
                 artists += idx >= trackArtist.length - 1 ? 
@@ -130,37 +119,29 @@ class DetailPage extends React.Component {
 
     render() {
 
-        const {  search, sorted, playlist, currentSong } = this.state;
+        const {  search, sorted, currentSong } = this.state;
         // if loading
-        const { playlistTracks: tracks } = this.props;
-        if (!tracks || !playlist) {
+        const { albumTracks: tracks, album } = this.props;
+        
+        if (!tracks ) {
             return (
             <div className='user-container'>
                 < Loading type = 'bubbles' color='black'/>
             </div>)
         }
-        const items = this.sortByPopularity(this.filterTracks()).map((track, idx) => track.track);
+        const items = this.filterTracks();
         const resultTracks = <IndexItem listSubheader='Playlist' playAudio = { this.playAudio }
-                                        items ={ items } currentSong = { currentSong }/>
+                                        items ={ items } currentSong = { currentSong } album={ album }/>
         return (
             <div>
                 <div id='track-header'>
-                    <h1 className='login-title'>{playlist.name}</h1>
+                    <h1 className='login-title'>{album.name}</h1>
                 </div>
                 <div id='detail-container'>
                     <Search value={ search } onChange = {this.handleChange}/>
                         <div id='detail-buttons'>
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        checked={sorted}
-                                        onClick={this.sort}
-                                        
-                                        color="primary"
-                                    />
-                                }
-                                label="Sort By Popularity"
-                            />
+                            <div></div>
+         
                             <a href="#" className='home-link' onClick={this.goHome}>Go back home</a>
                         </div>
 
@@ -175,14 +156,14 @@ class DetailPage extends React.Component {
 }
 
 const msp = state => ({
-    playlists: state.playlist.items,
     accessToken: state.accessToken,
-    playlistTracks: state.playlistTracks
+    albumTracks: state.albumTracks,
+    album: state.album,
 });
 
 const mdp = dispatch => ({
-    getPlaylistTracks: playlist => dispatch(getPlaylistTracks(playlist)),
+    getAlbumTracks: id => dispatch(getAlbumTracks(id)),
 })
 
-export default connect(msp, mdp)(withRouter(DetailPage));
+export default connect(msp, mdp)(withRouter(AlbumPage));
 

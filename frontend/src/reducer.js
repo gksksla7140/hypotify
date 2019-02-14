@@ -4,7 +4,9 @@ LOADING,
 USER_RECEIVED,
 FETCH_ERROR,
 GET_PLAYLIST,
-GET_PLAYLIST_TRACKS
+GET_PLAYLIST_TRACKS,
+GET_ALBUM_TRACKS,
+GET_ALBUM
 } from './constant';
 
 
@@ -15,7 +17,9 @@ const initialState = {
     error: [],
     user: null,
     playlist: null,
-    playlistTracks: null
+    playlistTracks: null,
+    albumTracks: null,
+    album: null,
 };
 export default  (state = initialState, action) => {
     // prevent state from changing
@@ -54,6 +58,20 @@ export default  (state = initialState, action) => {
         loading: false,
         error: [],
         playlistTracks: action.payload
+      }
+    case GET_ALBUM:
+      return {
+        ...state,
+        loading: false,
+        error: [],
+        album: action.payload
+      }
+    case GET_ALBUM_TRACKS:
+      return {
+        ...state,
+        loading: false,
+        error: [],
+        albumTracks: action.payload
       }
       
     default:

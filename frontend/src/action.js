@@ -6,7 +6,9 @@ import {
     USER_RECEIVED,
     FETCH_ERROR,
     GET_PLAYLIST,
-    GET_PLAYLIST_TRACKS
+    GET_PLAYLIST_TRACKS,
+    GET_ALBUM_TRACKS,
+    GET_ALBUM,
 } from './constant';
 
 //make spotify api server
@@ -66,4 +68,23 @@ export const getPlaylistTracks = playlist => dispatch => {
     .catch(e => dispatch({type: FETCH_ERROR,
         payload: JSON.parse(e.response).error.message
     }))
+}
+
+export const getAlbumTracks = albumId => dispatch => {
+    spotifyApi.getAlbum(albumId)
+    .then(res=> {
+        dispatch({
+            type: GET_ALBUM,
+            payload: res
+        })
+    })
+    .catch(err=> console.log(err));
+
+
+    spotifyApi.getAlbumTracks(albumId)
+    .then(res=> dispatch({
+        type: GET_ALBUM_TRACKS,
+        payload: res.items
+    }))
+    .catch(e=> console.log(e));
 }
