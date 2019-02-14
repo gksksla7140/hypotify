@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "setup": "concurrently \"npm install\" \"npm install  --prefix frontend\"",
     "start": "concurrently \"nodemon --inspect server.js \" \"npm run frontend\"",
-    "frontend": "npm start --prefix frontend"
+    "frontend": "npm start --prefix frontend",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
   },
   "author": "",
   "license": "ISC",
@@ -19,7 +20,7 @@
     "dotenv": "^6.2.0",
     "express": "^4.15.4",
     "http-proxy": "^1.17.0",
-    "nodemon": "^1.18.9",
+    "nodemon": "^1.18.10",
     "path": "^0.12.7",
     "querystring": "^0.2.0",
     "request": "^2.81.0",
