@@ -42,6 +42,7 @@ class FullWidthTabs extends React.Component {
 
   handleChangeIndex = index => {
     this.setState({ value: index });
+    this.props.resetAudio();
   };
 
   render() {
@@ -66,6 +67,7 @@ class FullWidthTabs extends React.Component {
           axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
           index={this.state.value}
           onChangeIndex={this.handleChangeIndex}
+          ignoreNativeScroll={false}
         >
           <TabContainer dir={theme.direction}>{ navContent[0] }</TabContainer>
           <TabContainer dir={theme.direction}>{ navContent[1] }</TabContainer>
