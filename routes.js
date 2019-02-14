@@ -12,7 +12,7 @@ const router = new express.Router();
 
 const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
 const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
-const REDIRECT_URI = process.env.REDIRECT_URI || 'http://localhost:5000/callback';
+const REDIRECT_URI = process.env.REDIRECT_URI || 'https://hypotify.herokuapp.com/callback';
 const SESSION_KEY = 'session_key';
 
 const scopes = ['user-read-private', 'user-read-email'];
@@ -34,7 +34,7 @@ const spotifyServer = new Spotify({
     redirectUri: REDIRECT_URI
 });
 
-router.get('/login', (req, res) => {
+router.get('/api/login', (req, res) => {
     //generate key
   const key = generateRandomString(16);
   // insert it into a cookie

@@ -8,7 +8,7 @@ class Login extends Component {
    handleClick = () => {
        // Will hit our backend and log in to spotify
     //    this.props.history.push('/signup');
-    window.location = 'http://localhost:5000/login'
+    window.location = 'https://hypotify.herokuapp.com/api/login'
    }
 
     render() {
